@@ -41,8 +41,6 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
-  # display all the films a particular customer is booked in
-
   def films()
     sql = "SELECT films.*
            FROM films
@@ -66,7 +64,7 @@ class Customer
   end
 
   def self.map_items(data)
-    result = data.map{|star| Customer.new(star)}
+    result = data.map{|x| Customer.new(x)}
     return result
   end
 

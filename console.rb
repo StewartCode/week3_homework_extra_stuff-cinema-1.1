@@ -1,22 +1,23 @@
 require_relative('models/ticket')
 require_relative('models/film')
 require_relative('models/customer')
+require_relative("db/sql_runner")
 
 require('pry-byebug')
 
 cinema_float = 2000
 
-man_bites_dog_a_seats_left = 4
-man_bites_dog_b_seats_left = 4
-
-operation_wolf_a_seats_left = 4
-operation_wolf_b_seats_left = 4
-
-pans_labyrinth_a_seats_left = 4
-pans_labyrinth_b_seats_left = 4
-
-ghost_busters_a_seats_left = 4
-ghost_busters_b_seats_left = 4
+# man_bites_dog_a_seats_left = 10
+# man_bites_dog_b_seats_left = 10
+#
+# operation_wolf_a_seats_left = 10
+# operation_wolf_b_seats_left = 10
+#
+# pans_labyrinth_a_seats_left = 10
+# pans_labyrinth_b_seats_left = 10
+#
+# ghost_busters_a_seats_left = 10
+# ghost_busters_b_seats_left = 10
 
 def capitalise(string)
     stage1 = string.split
@@ -28,30 +29,54 @@ end
 customer_array = [
                    {
                      'name' => 'bob smith',
-                    'funds' => 20,
+                    'funds' => 200,
                     'film'  => 'Man Bites Dog',
                     'showing' => '1pm'
                    },
                    {
                       'name' => 'jim hunter',
-                     'funds' => 40,
+                     'funds' => 150,
                      'film'  => 'Operation Wolf',
                      'showing' => '8pm'
                    },
                    {
                       'name' => 'gareth miles',
-                     'funds' => 120,
+                     'funds' => 70,
                      'film'  => 'Man Bites Dog',
                      'showing' => '5pm'
                    },
                    {
                       'name' => 'jimmy cranky',
-                     'funds' => 39,
+                     'funds' => 59,
                      'film'  => 'Pans Labyrinth',
                      'showing' => '9pm'
+                   },
+                   {
+                      'name' => 'rick ashley',
+                     'funds' => 78,
+                     'film'  => 'Pans Labyrinth',
+                     'showing' => '9pm'
+                   },
+                   {
+                      'name' => 'susan smilie',
+                     'funds' => 82,
+                     'film'  => 'ghost busters',
+                     'showing' => '2.30pm'
+                   },
+                   {
+                      'name' => 'mickey mouse',
+                     'funds' => 98,
+                     'film'  => 'ghost busters',
+                     'showing' => '5.45pm'
+                   },
+                   {
+                      'name' => 'minny mouse',
+                     'funds' => 71,
+                     'film'  => 'operation wolf',
+                     'showing' => '8pm'
                    }
-
                  ]
+
 
 Ticket.delete_all()
 Film.delete_all()
@@ -169,7 +194,7 @@ for customer in customer_array
     puts ""
          sale = Customer.new({
         'name' => name,
-        'funds' => 20
+        'funds' => customer.values[1]
       })
       sale.save
 
@@ -191,7 +216,14 @@ for customer in customer_array
         puts "try again, single digits please"
         input2 = gets.to_i
       end
+
       counter = input2
+      amount1 = film_search.price
+      amount2 = amount1 * counter
+      amount3 = customer.values[1] - amount2
+      cinema_float += amount2
+
+
       while counter >= 0
         ticket = Ticket.new({'film_id' => film_search.id, 'customer_id' => sale.id})
         ticket.save
@@ -200,33 +232,23 @@ for customer in customer_array
 
 
 
-      #p customer.all
-      #p ticket.all
-      #p film.all
-      # customer1 = Customer.new({
-      #   'name' => 'bob smith',
-      #   'funds' => 20
-      # })
-  #p customer
-  #p customer1
-
-
-
-
-
-
   puts ""
   puts ""
   puts ""
   print %x{clear}
+puts "#{customer.values[0]} has £#{amount3} left"
+puts ""
+puts "the cinema now has £#{cinema_float}"
+puts ""
  end
 puts ""
 puts  "Thanks for playing"
 
-puts Ticket.all
-puts Customer.all
-puts Film.all
-
+# puts Ticket.all
+# puts Customer.all
+# puts Film.all
+# puts sale.films
+# puts film1a.customers
 #________________________________________
 
   # customer1 = Customer.new({
@@ -287,5 +309,5 @@ puts Film.all
  # film1.title = "test name"
  # film1.update
 
-#binding.pry
-#nil
+binding.pry
+nil
