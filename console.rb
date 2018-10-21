@@ -126,7 +126,7 @@ film_array = [film1a,film1b,film2a,film2b,film3a,film3b,film4a,film4b]
 
 
 print %x{clear}
-#x = film_array[0]
+#p film_array
 #p x.id
 
 puts "WELCOME TO THE EXPLODING HEAD CINEMA"
@@ -155,14 +155,6 @@ puts ""
 puts ""
 puts "Here comes your first customer"
 
-#counter = customer_array.length
-# counter = counter.to_s
-#
-# p counter
-#
-# counter = counter.to_i
-#
-# p counter
 
 for customer in customer_array
     puts "Hi i would like to see #{customer.values[2]}"
@@ -174,15 +166,40 @@ for customer in customer_array
     puts ""
             name = gets.chomp.to_s
     puts ""
-
+    puts ""
          sale = Customer.new({
         'name' => name,
         'funds' => 20
       })
       sale.save
-      film_search = film_array.find { |film| film.title == customer.values[2].downcase }
-      ticket = Ticket.new({'film_id' => film_search.id, 'customer_id' => sale.id})
-      ticket.save
+
+# [#<Film:0x00007fc3e899c830 @title="man bites dog", @price=8, @showing="1pm", @id=1201>,
+#   #<Film:0x00007fc3e9903a30 @title="man bites dog", @price=8, @showing="5pm", @id=1202>,
+#   #<Film:0x00007fc3e9902978 @title="operation wolf", @price=5, @showing="2pm", @id=1203>,
+#   #<Film:0x00007fc3e99013c0 @title="operation wolf", @price=5, @showing="8pm", @id=1204>,
+#   #<Film:0x00007fc3e99001f0 @title="pans labyrinth", @price=6, @showing="3pm", @id=1205>,
+#   #<Film:0x00007fc3e9123590 @title="pans labyrinth", @price=6, @showing="9pm", @id=1206>,
+#   #<Film:0x00007fc3e9122a00 @title="ghost busters", @price=4, @showing="2.30pm", @id=1207>,
+#   #<Film:0x00007fc3e9121e70 @title="ghost busters", @price=4, @showing="5.45pm", @id=1208>]
+
+      film_search = film_array.find { |film| film.title == customer.values[2].downcase && film.showing == customer.values[3] }
+  puts "how many tickets?"
+
+      input2 = gets.chomp.to_i
+
+      until input2 == 1 || input2 == 2 || input2 == 3 || input2 == 4 || input2 == 5 || input2 == 6 || input2 == 7 || input2 == 8 || input2 == 9
+        puts "try again, single digits please"
+        input2 = gets.to_i
+      end
+      counter = input2
+      while counter >= 0
+        ticket = Ticket.new({'film_id' => film_search.id, 'customer_id' => sale.id})
+        ticket.save
+        counter -= 1
+      end
+
+
+
       #p customer.all
       #p ticket.all
       #p film.all
@@ -201,6 +218,7 @@ for customer in customer_array
   puts ""
   puts ""
   puts ""
+  print %x{clear}
  end
 puts ""
 puts  "Thanks for playing"
@@ -211,10 +229,10 @@ puts Film.all
 
 #________________________________________
 
-  customer1 = Customer.new({
-    'name' => 'bob smith',
-    'funds' => 20
-  })
+  # customer1 = Customer.new({
+  #   'name' => 'bob smith',
+  #   'funds' => 20
+  # })
   #
   # customer1.save()
   #
