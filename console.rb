@@ -4,6 +4,20 @@ require_relative('models/customer')
 
 require('pry-byebug')
 
+cinema_float = 2000
+
+man_bites_dog_a_seats_left = 4
+man_bites_dog_b_seats_left = 4
+
+operation_wolf_a_seats_left = 4
+operation_wolf_b_seats_left = 4
+
+pans_labyrinth_a_seats_left = 4
+pans_labyrinth_b_seats_left = 4
+
+ghost_busters_a_seats_left = 4
+ghost_busters_b_seats_left = 4
+
 def capitalise(string)
     stage1 = string.split
     stage2 = stage1.map{|x| x.capitalize}
@@ -11,73 +25,196 @@ def capitalise(string)
     return result
 end
 
+customer_array = [
+                   {
+                     'name' => 'bob smith',
+                    'funds' => 20,
+                    'film'  => 'Man Bites Dog',
+                    'showing' => '1pm'
+                   },
+                   {
+                      'name' => 'jim hunter',
+                     'funds' => 40,
+                     'film'  => 'Operation Wolf',
+                     'showing' => '8pm'
+                   },
+                   {
+                      'name' => 'gareth miles',
+                     'funds' => 120,
+                     'film'  => 'Man Bites Dog',
+                     'showing' => '5pm'
+                   },
+                   {
+                      'name' => 'jimmy cranky',
+                     'funds' => 39,
+                     'film'  => 'Pans Labyrinth',
+                     'showing' => '9pm'
+                   }
+
+                 ]
+
 Ticket.delete_all()
 Film.delete_all()
 Customer.delete_all()
 
 
-  film1 = Film.new({
+  film1a = Film.new({
     'title' => 'man bites dog',
-    'price' => 8
+    'price' => 8,
+    'showing' => "1pm"
   })
 
-  film1.save()
-  # z = film1.title
-  # title1 = capitalise(z)
-  # p title1
+  film1a.save()
 
-  film2 = Film.new({
+  film1b = Film.new({
+    'title' => 'man bites dog',
+    'price' => 8,
+    'showing' => "5pm"
+  })
+
+  film1b.save()
+
+  film2a = Film.new({
     'title' => 'operation wolf',
-    'price' =>  5
+    'price' =>  5,
+    'showing' =>  "2pm"
   })
 
-  film2.save()
+  film2a.save()
 
-  film3 = Film.new({
+  film2b = Film.new({
+    'title' => 'operation wolf',
+    'price' =>  5,
+    'showing' =>  "8pm"
+  })
+
+  film2b.save()
+
+  film3a = Film.new({
     'title' => 'pans labyrinth',
-    'price' =>  6
+    'price' =>  6,
+    'showing' => "3pm"
   })
 
-  film3.save()
+  film3a.save()
 
-  film4 = Film.new({
+  film3b = Film.new({
+    'title' => 'pans labyrinth',
+    'price' =>  6,
+    'showing' => "9pm"
+  })
+
+  film3b.save()
+
+  film4a = Film.new({
     'title' => 'ghost busters',
-    'price' =>  4
+    'price' =>  4,
+    'showing' => "2.30pm"
   })
 
-  film4.save()
+  film4a.save()
+
+  film4b = Film.new({
+    'title' => 'ghost busters',
+    'price' =>  4,
+    'showing' => "5.45pm"
+  })
+
+  film4b.save()
+
+film_array = [film1a,film1b,film2a,film2b,film3a,film3b,film4a,film4b]
+
 
 print %x{clear}
-
+#x = film_array[0]
+#p x.id
 
 puts "WELCOME TO THE EXPLODING HEAD CINEMA"
 puts "THESE ARE THE FILMS YOU CAN SEE TODAY"
 puts ""
 
-puts "Film 1 = #{capitalise(film1.title)} is a french dark comedy. "
-puts "Rating 18. £8 per ticket"
+puts "Film 1 = #{capitalise(film1a.title)} is a french dark comedy. "
+puts "Rating 18. £#{film1a.price} per ticket"
+puts "Showing at #{film1a.showing} and #{film1b.showing}"
 puts ""
 
-puts "Film 2 = #{capitalise(film2.title)} is a war movie set in Vietnam. "
-puts "Rating 18. £5 per ticket"
+puts "Film 2 = #{capitalise(film2a.title)} is a war movie set in Vietnam. "
+puts "Rating 18. £#{film2a.price} per ticket"
+puts "Showing at #{film2a.showing} and #{film2b.showing}"
 puts ""
 
-puts "Film 3 = #{capitalise(film3.title)} is a fantasy adventure. "
-puts "Rating 15. £6 per ticket"
+puts "Film 3 = #{capitalise(film3a.title)} is a fantasy adventure. "
+puts "Rating 15. £#{film3a.price} per ticket"
+puts "Showing at #{film3a.showing} and #{film3b.showing}"
 puts ""
 
-puts "Film 4 = #{capitalise(film4.title)} is a classic comedy sci-fi. "
-puts "Rating PG. £4 per ticket"
+puts "Film 4 = #{capitalise(film4a.title)} is a classic comedy sci-fi. "
+puts "Rating PG. £#{film4a.price} per ticket"
+puts "Showing at #{film4a.showing} and #{film4b.showing}"
 puts ""
+puts ""
+puts "Here comes your first customer"
 
-p film1.title
+#counter = customer_array.length
+# counter = counter.to_s
+#
+# p counter
+#
+# counter = counter.to_i
+#
+# p counter
+
+for customer in customer_array
+    puts "Hi i would like to see #{customer.values[2]}"
+    puts "I'd like to go to the #{customer.values[3]} showing"
+    puts ""
+    puts "You ask for his name, #{customer.values[0]} he replies"
+    puts ""
+    puts "Please enter #{customer.values[0]} into the system "
+    puts ""
+            name = gets.chomp.to_s
+    puts ""
+
+         sale = Customer.new({
+        'name' => name,
+        'funds' => 20
+      })
+      sale.save
+      film_search = film_array.find { |film| film.title == customer.values[2].downcase }
+      ticket = Ticket.new({'film_id' => film_search.id, 'customer_id' => sale.id})
+      ticket.save
+      #p customer.all
+      #p ticket.all
+      #p film.all
+      # customer1 = Customer.new({
+      #   'name' => 'bob smith',
+      #   'funds' => 20
+      # })
+  #p customer
+  #p customer1
+
+
+
+
+
+
+  puts ""
+  puts ""
+  puts ""
+ end
+puts ""
+puts  "Thanks for playing"
+
+puts Ticket.all
+puts Customer.all
+puts Film.all
 
 #________________________________________
 
-  # customer1 = Customer.new({
-  #   'name' => 'bob smith',
-  #   'funds' => 20
-  # })
+  customer1 = Customer.new({
+    'name' => 'bob smith',
+    'funds' => 20
+  })
   #
   # customer1.save()
   #
